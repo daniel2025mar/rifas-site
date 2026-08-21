@@ -1,0 +1,41 @@
+# Dependências
+node_modules/
+**/node_modules/
+
+# Arquivos de ambiente e credenciais (nunca commitar)
+.env
+.env.*
+!.env.example
+!.env.instagram.example
+!scripts/.env.migration.example
+!backend/.env.example
+scripts/.env.local
+backend/.env
+*.pem
+*.p12
+*.key
+credentials.json
+**/credentials.json
+
+# Exports e dados sensíveis
+data/supabase-export/
+data/**/*.csv
+
+# Builds
+dist/
+build/
+
+# Configurações do VS Code
+.vscode/
+
+# Logs
+*.log
+
+# Arquivos temporários
+*.tmp
+*.temp
+supabase/.temp/
+
+# Sistema operacional
+.DS_Store
+Thumbs.db

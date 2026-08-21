@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="color-scheme" content="light only">
+  <meta name="theme-color" content="#ffffff">
+  <title>Pagamento | PowerApps Sistemas</title>
+  <link rel="stylesheet" href="css/style.css?v=152">
+  <link rel="icon" href="assets/logo.png" type="image/png">
+</head>
+<body class="auth-chrome">
+  <div class="auth-page">
+    <div class="auth-panel">
+      <div class="auth-card auth-card--wide">
+        <div class="auth-card__header">
+          <span class="logo-badge logo-badge--sm">
+            <img src="assets/logo.png" alt="PowerApps Sistemas" width="32" height="32">
+          </span>
+          <h1>Liberar Vendas</h1>
+          <p id="pay-subtitle">Pagamento &uacute;nico de R$ 20,00 para liberar a tela de Vendas</p>
+        </div>
+
+        <div id="pay-status" class="pay-status" hidden></div>
+
+        <div id="pay-plan" class="pay-plan">
+          <div class="pay-plan__title" id="pay-plan-title">Carregando plano...</div>
+          <div class="pay-plan__price" id="pay-plan-price"></div>
+          <p class="pay-plan__hint" id="pay-plan-hint"></p>
+        </div>
+
+        <div class="contribute-box" style="margin-top:1rem;">
+          <div class="contribute-card">
+            <div class="contribute-row">
+              <span>Favorecido</span>
+              <strong id="pix-nome">—</strong>
+            </div>
+            <div class="contribute-row">
+              <span>Banco</span>
+              <strong id="pix-banco">—</strong>
+            </div>
+            <div class="contribute-row contribute-row--key">
+              <span>Chave PIX</span>
+              <strong id="pix-chave">—</strong>
+            </div>
+          </div>
+          <p class="contribute-hint">
+            Pague via PIX, anexe o <strong>comprovante</strong> (print/foto) e toque em
+            &quot;Enviar comprovante&quot;. Isso <strong>n&atilde;o libera na hora</strong>:
+            o administrador verifica a imagem e s&oacute; ent&atilde;o libera a tela de Vendas.
+          </p>
+        </div>
+
+        <div class="pay-proof" id="pay-proof-box">
+          <label class="pay-proof__label" for="pay-proof-input">Comprovante de pagamento *</label>
+          <input
+            type="file"
+            id="pay-proof-input"
+            accept="image/jpeg,image/jpg,image/png,image/webp,image/*"
+            capture="environment"
+          >
+          <p class="pay-proof__hint">JPG, PNG ou WEBP — at&eacute; 4 MB. Obrigat&oacute;rio para an&aacute;lise.</p>
+          <div class="pay-proof__preview" id="pay-proof-preview" hidden>
+            <img id="pay-proof-img" alt="Pr&eacute;-visualiza&ccedil;&atilde;o do comprovante">
+            <button type="button" class="btn btn-ghost btn-sm ripple" id="pay-proof-clear">Remover</button>
+          </div>
+        </div>
+
+        <div class="pay-actions">
+          <button type="button" class="btn btn-outline btn-block ripple" id="btn-copy-pix">Copiar chave Pix</button>
+          <button type="button" class="btn btn-primary btn-block ripple" id="btn-confirm-intent">Confirmar pagamento</button>
+          <button type="button" class="btn btn-success btn-block ripple" id="btn-already-paid" disabled>
+            Enviar comprovante e aguardar
+          </button>
+          <button type="button" class="btn btn-outline btn-block ripple" id="btn-continue-panel" hidden>Acessar Sistema</button>
+          <button type="button" class="btn btn-ghost btn-block ripple" id="btn-logout">Sair</button>
+        </div>
+
+        <p id="pay-error" class="form-error" hidden></p>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/config.js?v=10"></script>
+  <script src="js/store.js?v=9"></script>
+  <script src="js/nome-completo.js?v=1"></script>
+  <script src="js/frontend-api.js?v=18"></script>
+    <script src="js/default-avatars.js?v=3"></script>
+<script src="js/ui.js?v=8"></script>
+  <script src="js/contribuicao.js?v=6"></script>
+  <script src="js/proteger-rota.js?v=5"></script>
+  <script src="js/pagamento.js?v=7"></script>
+  <script src="js/offline-guard.js?v=6"></script>
+  <script src="js/maintenance-guard.js?v=8"></script>
+  <script src="js/aviso-guard.js?v=2"></script>
+</body>
+</html>
