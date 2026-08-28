@@ -1,0 +1,50 @@
+# Dependências
+node_modules/
+**/node_modules/
+
+# Arquivos de ambiente e credenciais (nunca commitar)
+.env
+.env.*
+!.env.example
+!.env.instagram.example
+!scripts/.env.migration.example
+!backend/.env.example
+!server/.env.example
+scripts/.env.local
+backend/.env
+server/.env
+*.pem
+*.p12
+*.key
+*.crt
+ca.pem
+aiven-ca.pem
+credentials.json
+**/credentials.json
+
+# Migração Neon → Aiven (dumps com dados reais + certs; NUNCA no GitHub)
+migracao-neon-aiven/**
+!migracao-neon-aiven/PASSOS.md
+
+# Exports e dados sensíveis
+data/supabase-export/
+data/**/*.csv
+
+# Builds
+dist/
+build/
+
+# Configurações do VS Code
+.vscode/
+
+# Logs
+*.log
+
+# Arquivos temporários
+*.tmp
+*.temp
+supabase/.temp/
+
+# Sistema operacional
+.DS_Store
+Thumbs.db

@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="color-scheme" content="light only">
+  <meta name="theme-color" content="#ffffff">
+  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: dark)">
+  <meta name="msapplication-navbutton-color" content="#ffffff">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <script>
+    (function () {
+      var root = document.documentElement;
+      root.style.backgroundColor = '#ffffff';
+      root.style.colorScheme = 'light';
+      root.removeAttribute('data-theme');
+      function paintWhite() {
+        var list = document.querySelectorAll('meta[name="theme-color"]');
+        if (!list.length) {
+          var m = document.createElement('meta');
+          m.setAttribute('name', 'theme-color');
+          m.setAttribute('content', '#ffffff');
+          document.head.appendChild(m);
+          return;
+        }
+        for (var i = 0; i < list.length; i++) list[i].setAttribute('content', '#ffffff');
+      }
+      paintWhite();
+      document.addEventListener('DOMContentLoaded', paintWhite);
+    })();
+  </script>
+  <title>Cadastro | PowerApps Sistemas</title>
+  <link rel="stylesheet" href="css/style.css?v=190">
+  <link rel="icon" href="assets/logo.png" type="image/png">
+</head>
+<body class="auth-chrome">
+  <div class="auth-page">
+    <div class="auth-panel">
+      <div class="auth-card">
+        <div class="auth-card__header">
+          <span class="logo-badge logo-badge--sm">
+            <img src="assets/logo.png" alt="PowerApps Sistemas" width="32" height="32">
+          </span>
+          <h1>Criar Conta</h1>
+          <p>A&ccedil;&otilde;es beneficentes e sorteios empresariais para colaboradores ou clientes.</p>
+        </div>
+
+        <div id="success-banner" class="success-banner">Cadastro realizado com sucesso.</div>
+
+        <form id="cadastro-form" novalidate>
+          <div class="form-group">
+            <label>Tipo de conta</label>
+            <div class="account-type-radios" role="radiogroup" aria-label="Tipo de conta">
+              <label class="account-type-radio">
+                <input type="radio" name="tipoConta" value="pessoa_fisica" checked>
+                <span>Pessoa f&iacute;sica / Causa social</span>
+              </label>
+              <label class="account-type-radio">
+                <input type="radio" name="tipoConta" value="empresa">
+                <span>Empresa</span>
+              </label>
+            </div>
+          </div>
+
+          <div id="empresa-fields" class="empresa-fields" hidden>
+            <div class="form-group">
+              <label for="razaoSocial">Raz&atilde;o social ou Nome fantasia</label>
+              <input id="razaoSocial" name="razaoSocial" type="text" placeholder="Nome da empresa" autocomplete="organization">
+            </div>
+            <div class="form-group">
+              <label for="cnpj">CNPJ</label>
+              <input id="cnpj" name="cnpj" type="text" inputmode="numeric" placeholder="00.000.000/0000-00" maxlength="18" autocomplete="off">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="name">Nome Completo</label>
+            <input id="name" name="name" type="text" required placeholder="Ex.: Daniel Antonio Martins" autocomplete="name" inputmode="text" spellcheck="false">
+          </div>
+          <div class="form-group">
+            <label for="email">E-mail</label>
+            <input id="email" name="email" type="email" required placeholder="seu@email.com" autocomplete="email">
+          </div>
+          <div class="form-group">
+            <label for="password">Senha</label>
+            <input id="password" name="password" type="password" required placeholder="M&iacute;nimo 6 caracteres" autocomplete="new-password">
+          </div>
+          <div class="form-group">
+            <label for="confirm">Confirmar Senha</label>
+            <input id="confirm" name="confirm" type="password" required placeholder="Repita a senha" autocomplete="new-password">
+          </div>
+          <div id="pf-idade-fields" class="pf-idade-fields">
+            <div class="form-group">
+              <label for="cpf">CPF</label>
+              <input id="cpf" name="cpf" type="text" inputmode="numeric" placeholder="000.000.000-00"
+                maxlength="14" autocomplete="off" required>
+            </div>
+            <div class="form-group">
+              <label for="dataNascimento-trigger">Data de nascimento</label>
+              <div class="pas-date-picker" data-max-today="true" data-min-year="1900">
+                <input type="hidden" id="dataNascimento" name="dataNascimento" required autocomplete="bday">
+                <button type="button" class="pas-date-picker__trigger" id="dataNascimento-trigger" aria-label="Selecionar data de nascimento">
+                  <span class="pas-date-picker__label">Selecione a data</span>
+                  <span class="pas-date-picker__icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <rect x="3" y="4" width="18" height="18" rx="2"></rect>
+                      <line x1="16" y1="2" x2="16" y2="6"></line>
+                      <line x1="8" y1="2" x2="8" y2="6"></line>
+                      <line x1="3" y1="10" x2="21" y2="10"></line>
+                    </svg>
+                  </span>
+                </button>
+              </div>
+            </div>
+            <div class="form-group form-group--consent">
+              <label class="consent-check">
+                <input id="idadeDeclaracao" name="idadeDeclaracao" type="checkbox" value="1">
+                <span>Declaro que as informa&ccedil;&otilde;es fornecidas s&atilde;o verdadeiras e que sou maior de 18 anos</span>
+              </label>
+            </div>
+          </div>
+          <p id="cadastro-error" class="form-error" hidden></p>
+          <button class="btn btn-primary btn-block ripple" type="submit" id="btn-cadastrar" disabled>Cadastrar</button>
+        </form>
+
+        <p class="auth-footer-link">J&aacute; tem conta? <a href="index.html">Entrar</a></p>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/config.js?v=10"></script>
+  <script src="js/store.js?v=9"></script>
+  <script src="js/nome-completo.js?v=1"></script>
+  <script src="js/frontend-api.js?v=34"></script>
+  <script src="js/ui.js?v=31"></script>
+  <script src="js/date-picker.js?v=3"></script>
+  <script src="js/cadastro.js?v=12"></script>
+  <script src="js/offline-guard.js?v=6"></script>
+  <script src="js/maintenance-guard.js?v=9"></script>
+  <script src="js/aviso-guard.js?v=2"></script>
+</body>
+</html>

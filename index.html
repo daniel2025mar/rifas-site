@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="color-scheme" content="light only">
+  <meta name="theme-color" content="#ffffff">
+  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: dark)">
+  <meta name="msapplication-navbutton-color" content="#ffffff">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <script>
+    (function () {
+      var root = document.documentElement;
+      root.style.backgroundColor = '#ffffff';
+      root.style.colorScheme = 'light';
+      root.removeAttribute('data-theme');
+      function paintWhite() {
+        var list = document.querySelectorAll('meta[name="theme-color"]');
+        if (!list.length) {
+          var m = document.createElement('meta');
+          m.setAttribute('name', 'theme-color');
+          m.setAttribute('content', '#ffffff');
+          document.head.appendChild(m);
+          return;
+        }
+        for (var i = 0; i < list.length; i++) list[i].setAttribute('content', '#ffffff');
+      }
+      paintWhite();
+      document.addEventListener('DOMContentLoaded', paintWhite);
+    })();
+  </script>
+  <meta name="description" content="PowerApps Sistemas — Ferramenta para ações beneficentes e sorteios empresariais para colaboradores e clientes.">
+  <title>Login | PowerApps Sistemas</title>
+  <link rel="stylesheet" href="css/style.css?v=186">
+  <link rel="icon" href="assets/logo.png" type="image/png">
+</head>
+<body class="auth-fixed auth-chrome">
+  <div class="auth-page">
+    <div class="auth-panel">
+      <div class="auth-card">
+        <div class="auth-card__header">
+          <span class="logo-badge logo-badge--lg">
+            <img src="assets/logo.png" alt="PowerApps" width="56" height="56">
+          </span>
+          <p class="brand-name brand-name--auth">Power<span>Apps</span></p>
+          <p>Sistemas</p>
+          <p class="auth-purpose-tagline">Para a&ccedil;&otilde;es beneficentes e sorteios empresariais &mdash; colaboradores e clientes.</p>
+        </div>
+
+        <form id="login-form" novalidate>
+          <div class="form-group">
+            <label for="email">E-mail</label>
+            <div class="input-with-icon">
+              <span class="input-icon" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+              </span>
+              <input id="email" name="email" type="email" required placeholder="seu@email.com" autocomplete="email">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="password">Senha</label>
+            <div class="password-field input-with-icon">
+              <span class="input-icon input-icon--lock" id="login-lock-icon" aria-hidden="true">
+                <svg class="lock-icon lock-icon--closed" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                  <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                </svg>
+                <svg class="lock-icon lock-icon--open" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" hidden>
+                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                  <path d="M7 11V7a5 5 0 0 1 9.9-1"></path>
+                </svg>
+              </span>
+              <input id="password" name="password" type="password" required placeholder="********" autocomplete="current-password">
+              <button type="button" class="password-toggle" id="toggle-password" aria-label="Mostrar senha" title="Mostrar senha">
+                <svg class="password-toggle__icon password-toggle__icon--show" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                  <circle cx="12" cy="12" r="3"></circle>
+                </svg>
+                <svg class="password-toggle__icon password-toggle__icon--hide" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                  <line x1="1" y1="1" x2="23" y2="23"></line>
+                </svg>
+              </button>
+            </div>
+          </div>
+          <p id="login-error" class="form-error" hidden></p>
+          <button class="btn btn-primary btn-block ripple" type="submit" id="login-submit-btn">Login</button>
+          <button class="btn btn-ghost btn-block" type="button" id="btn-forgot-password" hidden style="margin-top:0.45rem;">
+            Esqueci a senha
+          </button>
+        </form>
+
+        <form id="forgot-form" class="login-forgot-form" hidden novalidate>
+          <p class="form-hint" style="margin-bottom:0.85rem;">
+            Informe o e-mail cadastrado. O PowerApps Sistemas enviará um link para redefinir a senha.
+          </p>
+          <div class="form-group">
+            <label for="forgot-email">E-mail</label>
+            <div class="input-with-icon">
+              <span class="input-icon" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                  <polyline points="22,6 12,13 2,6"></polyline>
+                </svg>
+              </span>
+              <input id="forgot-email" name="email" type="email" required placeholder="seu@email.com" autocomplete="email">
+            </div>
+          </div>
+          <p id="forgot-error" class="form-error" hidden></p>
+          <p id="forgot-success" class="form-hint" hidden style="color:#166534;"></p>
+          <button class="btn btn-primary btn-block ripple" type="submit" id="forgot-submit-btn">
+            Enviar link de redefinição
+          </button>
+          <button class="btn btn-ghost btn-block" type="button" id="forgot-back" style="margin-top:0.5rem;">
+            Voltar ao login
+          </button>
+        </form>
+
+        <form id="login-2fa-form" class="login-2fa-form" hidden novalidate>
+          <p class="form-hint" style="margin-bottom:0.85rem;">
+            Digite o c&oacute;digo de 6 d&iacute;gitos do autenticador.
+          </p>
+          <div class="form-group">
+            <label for="twofa-code">C&oacute;digo 2FA</label>
+            <input id="twofa-code" name="code" type="text" inputmode="numeric" pattern="[0-9]{6}"
+              autocomplete="one-time-code" maxlength="6" minlength="6" placeholder="000000"
+              required aria-describedby="twofa-hint">
+          </div>
+          <p id="login-2fa-error" class="form-error" hidden></p>
+          <button class="btn btn-primary btn-block ripple" type="submit">Confirmar</button>
+          <button class="btn btn-ghost btn-block" type="button" id="login-2fa-back" style="margin-top:0.5rem;">
+            Voltar
+          </button>
+        </form>
+
+        <p class="auth-footer-link" id="login-create-account">N&atilde;o tem conta? <a href="cadastro.html">Criar Conta</a></p>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/config.js?v=10"></script>
+  <script src="js/store.js?v=9"></script>
+  <script src="js/nome-completo.js?v=1"></script>
+  <script src="js/frontend-api.js?v=34"></script>
+  <script src="js/ui.js?v=31"></script>
+  <script src="js/login.js?v=18"></script>
+  <script src="js/offline-guard.js?v=6"></script>
+  <script src="js/maintenance-guard.js?v=9"></script>
+  <script src="js/aviso-guard.js?v=2"></script>
+</body>
+</html>

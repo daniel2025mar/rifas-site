@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="PowerApps Sistemas">
+  <rect width="128" height="128" rx="28" fill="#0A0A0B"/>
+  <path d="M34 28h42c16 0 28 11 28 26s-12 26-28 26H56v20H34V28zm22 34h18c7.5 0 12.5-4.2 12.5-11S81.5 40 74 40H56v22z" fill="#C8102E"/>
+  <rect x="34" y="96" width="60" height="8" rx="4" fill="#FFFFFF" opacity="0.9"/>
+</svg>

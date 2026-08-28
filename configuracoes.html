@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#000000">
+  <title>PowerApps Systems</title>
+  <script>(function(){try{var t=localStorage.getItem('pas_theme');if(!t)t='light';document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
+  <link rel="stylesheet" href="css/style.css?v=184">
+  <link rel="icon" href="assets/logo.png" type="image/png">
+</head>
+<body>
+  <div id="app"></div>
+
+  <script src="js/config.js?v=10"></script>
+  <script src="js/store.js?v=9"></script>
+  <script src="js/nome-completo.js?v=1"></script>
+  <script src="js/frontend-api.js?v=34"></script>
+  <script src="js/theme.js?v=6"></script>
+  <script src="js/default-avatars.js?v=3"></script>
+  <script src="js/ui.js?v=31"></script>
+  <script src="js/contribuicao.js?v=6"></script>
+  <script src="js/notificacoes.js?v=21"></script>
+  <script src="js/banner.js?v=15"></script>
+  <script src="js/sessao.js?v=11"></script>
+  <script src="js/proteger-rota.js?v=8"></script>
+  <script src="js/layout.js?v=51"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      const session = await Layout.render({ active: 'configuracoes', title: 'Configurações' });
+      if (!session) return;
+
+      Layout.setContent(`
+        <div class="slide-up" style="max-width:720px;">
+          <h1 class="page-title">Configurações</h1>
+          <p class="page-subtitle">Acompanhe o status da sua conta e dos recursos do sistema.</p>
+
+          <div class="card" style="margin:1.25rem 0;">
+            <h3 style="margin-bottom:.35rem;">Conta</h3>
+            <p style="color:var(--muted);margin-bottom:1rem;">Dados da sua sessão neste dispositivo.</p>
+            <div class="form-group">
+              <label>Nome</label>
+              <input type="text" value="${UI.escapeHtml(session.name)}" readonly>
+            </div>
+            <div class="form-group">
+              <label>E-mail</label>
+              <input type="email" value="${UI.escapeHtml(session.email)}" readonly>
+            </div>
+          </div>
+
+          <button type="button" class="twofa-security-alert" id="twofa-security-alert" hidden>
+            <span class="twofa-security-alert__icon" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none">
+                <path d="M12 3 4.5 6.5v5.2c0 4.6 3.1 8.8 7.5 9.8 4.4-1 7.5-5.2 7.5-9.8V6.5L12 3Z"
+                  stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>
+                <path d="M12 8v5" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/>
+                <circle cx="12" cy="16.2" r="1" fill="currentColor"/>
+              </svg>
+            </span>
+            <span class="twofa-security-alert__text">
+              <strong>Melhore a Segurança da Sua Conta</strong>
+              <span>
+                Atualmente, você não possui nenhum método de autenticação em duas etapas ativado.
+                Recomendamos fortemente ativar o 2FA para proteger sua conta.
+              </span>
+            </span>
+          </button>
+
+          <div class="card instagram-connect-card" id="instagram-connect-card" style="margin:0.75rem 0;">
+            <div class="instagram-connect-card__icon" id="instagram-connect-icon" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24"
+                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect width="18" height="18" x="3" y="3" rx="5"/>
+                <circle cx="12" cy="12" r="3.5"/>
+                <circle cx="17" cy="7" r="1"/>
+              </svg>
+            </div>
+            <div class="instagram-connect-card__content">
+              <div class="page-head-row">
+                <div>
+                  <h3 style="margin-bottom:.35rem;">Conta do Instagram</h3>
+                  <p id="instagram-connect-description" style="color:var(--muted);">
+                    Carregando situação da conexão...
+                  </p>
+                </div>
+                <span class="pill" id="instagram-connect-status">Verificando</span>
+              </div>
+              <div id="instagram-connect-account" hidden></div>
+              <div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-top:1rem;">
+                <button class="btn btn-primary ripple" type="button"
+                  id="btn-instagram-connect" hidden>Conectar Instagram</button>
+                <button class="btn btn-outline ripple" type="button"
+                  id="btn-instagram-reconnect" hidden>Trocar conta</button>
+                <button class="btn btn-ghost ripple" type="button"
+                  id="btn-instagram-disconnect" hidden>Desconectar</button>
+              </div>
+              <p class="form-hint" style="margin-top:.75rem;">
+                Cada usuário conecta a própria conta Instagram Comercial ou Criador.
+                O sistema solicita acesso ao perfil, posts, comentários e publicação de sorteios.
+                Se você já conectou antes, use <strong>Trocar conta</strong> uma vez para liberar a publicação.
+                Contas conectadas ficam separadas por usuário — ninguém vê o Instagram do outro.
+              </p>
+            </div>
+          </div>
+
+          <div class="card" style="margin:0.75rem 0;">
+            <h3 style="margin-bottom:.35rem;">Tela inicial</h3>
+            <p style="color:var(--muted);margin-bottom:0.85rem;">
+              Escolha se os atalhos rápidos aparecem no Dashboard.
+            </p>
+            <label class="config-toggle">
+              <input type="checkbox" id="cfg-dash-shortcuts" ${Store.getDashShortcutsEnabled(session.userId) ? 'checked' : ''}>
+              <span>Mostrar atalhos na tela inicial</span>
+            </label>
+          </div>
+
+          <div class="card company-card" style="margin:0.75rem 0;">
+            <h3 style="margin-bottom:.35rem;">PowerApps Sistemas</h3>
+            <p style="color:var(--muted);margin-bottom:0.85rem;">
+              Criamos softwares e aplicativos completos e organizados para o dia a dia.
+              Envie sugestões ou reclamações pelo botão abaixo.
+            </p>
+            <div class="company-card__row">
+              <span class="company-card__label">Fale conosco</span>
+              <button type="button" class="company-card__mail" id="btn-sugestoes-config">
+                Enviar sugestão ou reclamação
+              </button>
+            </div>
+          </div>
+
+          <div class="card" id="banner-dev-card" style="margin:0.75rem 0;" hidden>
+            <h3 style="margin-bottom:.35rem;">Banner de divulgação</h3>
+            <p style="color:var(--muted);margin-bottom:0.85rem;">
+              Adicione um banner para aparecer em modal quando o usuário abrir o sistema.
+            </p>
+            <div class="form-group">
+              <label for="banner-title">Título (opcional)</label>
+              <input id="banner-title" type="text" maxlength="80" placeholder="Ex.: Nova versão disponível">
+            </div>
+            <div class="form-group">
+              <label for="banner-link">Link (opcional)</label>
+              <input id="banner-link" type="url" maxlength="300" placeholder="https://...">
+            </div>
+            <div class="form-group">
+              <label for="banner-image">Imagem do banner</label>
+              <input id="banner-image" type="file" accept="image/*">
+            </div>
+            <div class="banner-dev-preview" id="banner-preview" hidden>
+              <img alt="Prévia do banner">
+            </div>
+            <label class="banner-dev-check" style="display:flex;align-items:center;gap:.5rem;margin:0.75rem 0;">
+              <input id="banner-active" type="checkbox" checked>
+              <span>Exibir banner ao abrir o sistema</span>
+            </label>
+            <div style="display:flex;gap:.5rem;flex-wrap:wrap;">
+              <button type="button" class="btn btn-primary" id="btn-banner-save">Salvar banner</button>
+              <button type="button" class="btn btn-outline" id="btn-banner-preview">Ver como usuário</button>
+              <button type="button" class="btn btn-ghost" id="btn-banner-clear">Remover</button>
+            </div>
+            <p class="banner-dev-hint" id="banner-hint" style="margin-top:.75rem;color:var(--muted);font-size:.82rem;"></p>
+          </div>
+
+          <div class="card config-item" style="margin:0.75rem 0;">
+            <div>
+              <h4>Banco de dados na nuvem</h4>
+              <p>Conectado com segurança. Seus dados ficam protegidos e sincronizados online.</p>
+            </div>
+            <span class="pill" style="background:#dcfce7;color:#166534;">Ativo</span>
+          </div>
+
+          <div class="config-list">
+            <div class="card config-item">
+              <div>
+                <h4>Recuperação de senha por e-mail</h4>
+                <p>Redefina a senha pelo link enviado ao e-mail cadastrado (PowerApps Sistemas).</p>
+              </div>
+              <span class="pill" style="background:#dcfce7;color:#166534;">Ativo</span>
+            </div>
+            <div class="card config-item">
+              <div>
+                <h4>Autenticação avançada</h4>
+                <p>Login com Google.</p>
+              </div>
+              <span class="pill pill--soon">Em breve</span>
+            </div>
+            <div class="card config-item">
+              <div>
+                <h4>Sincronização em tempo real</h4>
+                <p>Atualização instantânea de rifas, números e reservas.</p>
+              </div>
+              <span class="pill pill--soon">Em breve</span>
+            </div>
+            <div class="card config-item">
+              <div>
+                <h4>Upload de Imagens</h4>
+                <p>Envio de capas e fotos das rifas na nuvem.</p>
+              </div>
+              <span class="pill pill--soon">Em breve</span>
+            </div>
+            <div class="card config-item">
+              <div>
+                <h4>Pagamentos PIX</h4>
+                <p>Geração de cobrança e confirmação automática.</p>
+              </div>
+              <span class="pill pill--soon">Em breve</span>
+            </div>
+            <div class="card config-item">
+              <div>
+                <h4>QR Code &amp; PDF</h4>
+                <p>Comprovantes, cartelas e impressão profissional.</p>
+              </div>
+              <span class="pill pill--soon">Em breve</span>
+            </div>
+            <div class="card config-item">
+              <div>
+                <h4>Notificações</h4>
+                <p>Alertas de reserva, venda e sorteio.</p>
+              </div>
+              <span class="pill" style="background:#dcfce7;color:#166534;">Ativo</span>
+            </div>
+          </div>
+        </div>
+      `);
+
+      document.getElementById('cfg-dash-shortcuts')?.addEventListener('change', (e) => {
+        const on = !!e.target.checked;
+        Store.setDashShortcutsEnabled(on, session.userId);
+        UI.toast(on ? 'Atalhos ativados na tela inicial.' : 'Atalhos ocultos na tela inicial.', 'success');
+      });
+
+      const INSTAGRAM_ICON_SVG = `
+        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24"
+          fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect width="18" height="18" x="3" y="3" rx="5"/>
+          <circle cx="12" cy="12" r="3.5"/>
+          <circle cx="17" cy="7" r="1"/>
+        </svg>`;
+
+      function setInstagramAvatar(url, username) {
+        const icon = document.getElementById('instagram-connect-icon');
+        if (!icon) return;
+        if (!url) {
+          icon.classList.remove('instagram-connect-card__icon--avatar');
+          icon.innerHTML = INSTAGRAM_ICON_SVG;
+          return;
+        }
+        icon.classList.add('instagram-connect-card__icon--avatar');
+        icon.innerHTML =
+          `<img src="${UI.escapeHtml(url)}" alt="Foto de @${UI.escapeHtml(username || '')}" referrerpolicy="no-referrer">`;
+        icon.querySelector('img').addEventListener('error', () => setInstagramAvatar(null));
+      }
+
+      async function loadInstagramConnection() {
+        const description = document.getElementById('instagram-connect-description');
+        const status = document.getElementById('instagram-connect-status');
+        const accountBox = document.getElementById('instagram-connect-account');
+        const connectBtn = document.getElementById('btn-instagram-connect');
+        const reconnectBtn = document.getElementById('btn-instagram-reconnect');
+        const disconnectBtn = document.getElementById('btn-instagram-disconnect');
+
+        const params = new URLSearchParams(window.location.search);
+        if (params.get('instagram') === 'conectado') {
+          UI.toast('Conta do Instagram conectada com sucesso.', 'success');
+          history.replaceState({}, '', 'configuracoes.html');
+        } else if (params.get('instagram') === 'erro') {
+          UI.toast(params.get('motivo') || 'Não foi possível conectar o Instagram.', 'error', 6000);
+          history.replaceState({}, '', 'configuracoes.html');
+        }
+
+        const result = await API.getInstagramConnection();
+        if (!result.ok) {
+          if (result.needsDeploy) {
+            description.textContent =
+              'Integração ainda não publicada no servidor. Peça ao administrador para fazer o deploy das Edge Functions no Supabase.';
+            status.textContent = 'Não instalado';
+          } else {
+            description.textContent = result.error || 'Não foi possível verificar a conexão.';
+            status.textContent = 'Indisponível';
+          }
+          status.className = 'pill pill--soon';
+          accountBox.hidden = true;
+          setInstagramAvatar(null);
+          connectBtn.hidden = true;
+          reconnectBtn.hidden = true;
+          disconnectBtn.hidden = true;
+          return;
+        }
+
+        if (!result.connected) {
+          description.textContent =
+            'Conecte sua conta para selecionar posts e buscar os comentários dos sorteios.';
+          status.textContent = 'Não conectado';
+          status.className = 'pill pill--soon';
+          accountBox.hidden = true;
+          setInstagramAvatar(null);
+          connectBtn.hidden = false;
+          reconnectBtn.hidden = true;
+          disconnectBtn.hidden = true;
+          return;
+        }
+
+        const account = result.account || {};
+        setInstagramAvatar(account.profile_picture_url, account.username);
+        description.textContent = 'Esta conta será usada para buscar os posts e comentários.';
+        status.textContent = 'Conectado';
+        status.className = 'pill pill--connected';
+        accountBox.hidden = false;
+        accountBox.innerHTML = `
+          <div class="instagram-account-summary">
+            <strong>@${UI.escapeHtml(account.username || '')}</strong>
+            ${account.nome ? `<span>${UI.escapeHtml(account.nome)}</span>` : ''}
+            ${account.account_type ? `<span class="pill">${UI.escapeHtml(account.account_type)}</span>` : ''}
+          </div>`;
+        connectBtn.hidden = true;
+        reconnectBtn.hidden = false;
+        disconnectBtn.hidden = false;
+      }
+
+      async function startInstagramConnection() {
+        UI.showLoading('Abrindo o Instagram...');
+        const result = await API.connectInstagram(() => UI.hideLoading());
+        UI.hideLoading();
+        if (!result.ok) {
+          if (result.cancelled) return;
+          UI.toast(
+            result.needsDeploy
+              ? 'Integração do Instagram ainda não publicada no servidor.'
+              : result.error,
+            result.needsDeploy ? 'info' : 'error',
+            6000
+          );
+          return;
+        }
+        UI.toast('Conta do Instagram conectada com sucesso.', 'success');
+        await loadInstagramConnection();
+      }
+
+      document.getElementById('btn-instagram-connect')?.addEventListener(
+        'click',
+        startInstagramConnection
+      );
+      document.getElementById('btn-instagram-reconnect')?.addEventListener(
+        'click',
+        startInstagramConnection
+      );
+      document.getElementById('btn-instagram-disconnect')?.addEventListener('click', () => {
+        UI.modal({
+          title: 'Desconectar Instagram',
+          body: '<p>Os sorteios já realizados continuam salvos, mas não será possível buscar novos comentários até conectar outra conta.</p>',
+          actions: [
+            { label: 'Cancelar', className: 'btn-ghost', onClick: (close) => close() },
+            {
+              label: 'Desconectar',
+              className: 'btn-danger',
+              onClick: async (close) => {
+                UI.showLoading('Desconectando...');
+                const result = await API.disconnectInstagram();
+                UI.hideLoading();
+                if (!result.ok) {
+                  UI.toast(result.error, 'error');
+                  return;
+                }
+                close();
+                UI.toast('Conta do Instagram desconectada.', 'success');
+                loadInstagramConnection();
+              }
+            }
+          ]
+        });
+      });
+
+      loadInstagramConnection();
+
+      document.getElementById('btn-sugestoes-config')?.addEventListener('click', () => {
+        UI.openFeedbackMailModal({
+          context: `Painel — usuário ${session.name || ''} (${session.email || ''})`
+        });
+      });
+
+      let bannerImageData = '';
+
+      async function loadBannerEditor() {
+        const card = document.getElementById('banner-dev-card');
+        if (!card || typeof SystemBanner === 'undefined' || !SystemBanner.isDeveloper(session)) return;
+        card.hidden = false;
+
+        const hint = document.getElementById('banner-hint');
+        const preview = document.getElementById('banner-preview');
+        const previewImg = preview?.querySelector('img');
+        const titleInput = document.getElementById('banner-title');
+        const linkInput = document.getElementById('banner-link');
+        const activeInput = document.getElementById('banner-active');
+
+        const result = await API.getSystemBanner();
+        if (result.needsSchema) {
+          if (hint) hint.textContent = 'Execute o SQL banner_sistema.sql no Supabase para ativar.';
+          return;
+        }
+        if (result.ok && result.banner) {
+          bannerImageData = result.banner.image || SystemBanner.DEFAULT_BANNER.image;
+          if (titleInput) titleInput.value = result.banner.title || '';
+          if (linkInput) linkInput.value = result.banner.link || '';
+          if (activeInput) activeInput.checked = result.banner.image ? !!result.banner.active : true;
+          if (bannerImageData && preview && previewImg) {
+            previewImg.src = bannerImageData;
+            preview.hidden = false;
+          }
+          if (hint) {
+            hint.textContent = 'Banner de divulgação pronto. Ao abrir o sistema, o modal aparece.';
+          }
+        } else if (SystemBanner.DEFAULT_BANNER?.image) {
+          bannerImageData = SystemBanner.DEFAULT_BANNER.image;
+          if (activeInput) activeInput.checked = true;
+          if (preview && previewImg) {
+            previewImg.src = bannerImageData;
+            preview.hidden = false;
+          }
+          if (hint) hint.textContent = 'Banner padrão carregado. Clique em Salvar para gravar no banco.';
+        }
+
+        document.getElementById('banner-image')?.addEventListener('change', async (e) => {
+          const file = e.target.files?.[0];
+          if (!file) return;
+          try {
+            UI.showLoading('Preparando imagem...');
+            bannerImageData = await SystemBanner.fileToDataUrl(file);
+            UI.hideLoading();
+            if (preview && previewImg) {
+              previewImg.src = bannerImageData;
+              preview.hidden = false;
+            }
+          } catch (err) {
+            UI.hideLoading();
+            UI.toast(err.message || 'Erro ao carregar imagem.', 'error');
+          }
+        });
+
+        document.getElementById('btn-banner-save')?.addEventListener('click', async () => {
+          UI.showLoading('Salvando banner...');
+          const saved = await API.saveSystemBanner({
+            image: bannerImageData,
+            title: titleInput?.value || '',
+            link: linkInput?.value || '',
+            active: !!activeInput?.checked
+          });
+          UI.hideLoading();
+          if (!saved.ok) {
+            UI.toast(saved.error || 'Erro ao salvar.', 'error');
+            return;
+          }
+          try {
+            sessionStorage.removeItem('pas_promo_banner_seen');
+            sessionStorage.removeItem('pas_promo_banner_seen_v2');
+            sessionStorage.removeItem('pas_promo_banner_seen_v3');
+            sessionStorage.removeItem('pas_promo_banner_seen_v4');
+            if (typeof SystemBanner !== 'undefined' && SystemBanner.clearSeenKeys) {
+              SystemBanner.clearSeenKeys();
+            }
+          } catch { /* ignore */ }
+          UI.toast('Banner salvo!', 'success');
+          if (hint) hint.textContent = saved.banner?.active
+            ? 'Banner ativo: será exibido ao abrir o sistema.'
+            : 'Banner salvo, mas ainda não está sendo exibido.';
+        });
+
+        document.getElementById('btn-banner-preview')?.addEventListener('click', () => {
+          if (!bannerImageData) {
+            UI.toast('Selecione uma imagem primeiro.', 'info');
+            return;
+          }
+          SystemBanner.open({
+            image: bannerImageData,
+            title: titleInput?.value || '',
+            link: linkInput?.value || '',
+            active: true
+          });
+        });
+
+        document.getElementById('btn-banner-clear')?.addEventListener('click', async () => {
+          UI.showLoading('Removendo...');
+          const cleared = await API.clearSystemBanner();
+          UI.hideLoading();
+          if (!cleared.ok) {
+            UI.toast(cleared.error || 'Erro ao remover.', 'error');
+            return;
+          }
+          bannerImageData = '';
+          if (titleInput) titleInput.value = '';
+          if (linkInput) linkInput.value = '';
+          if (activeInput) activeInput.checked = false;
+          if (preview) preview.hidden = true;
+          if (previewImg) previewImg.removeAttribute('src');
+          const fileInput = document.getElementById('banner-image');
+          if (fileInput) fileInput.value = '';
+          if (hint) hint.textContent = 'Banner removido.';
+          UI.toast('Banner removido.', 'success');
+        });
+      }
+
+      // ─── 2FA: aviso (ativação pelo menu lateral) ───────────
+      async function refreshTwoFaAlert() {
+        const alertEl = document.getElementById('twofa-security-alert');
+        if (!alertEl || typeof API.get2faStatus !== 'function') return;
+        const st = await API.get2faStatus();
+        const showAlert = !!(st?.ok && !st.ativo);
+        alertEl.hidden = !showAlert;
+        if (typeof Layout !== 'undefined' && typeof Layout.applySidebar2faState === 'function') {
+          Layout.applySidebar2faState(!!(st?.ok && st.ativo));
+        }
+      }
+
+      document.getElementById('twofa-security-alert')?.addEventListener('click', () => {
+        if (typeof Layout !== 'undefined' && typeof Layout.openSidebar2faModal === 'function') {
+          Layout.openSidebar2faModal();
+        }
+      });
+
+      refreshTwoFaAlert();
+      loadBannerEditor();
+
+      if (window.location.hash === '#security-2fa-card') {
+        requestAnimationFrame(() => {
+          document.getElementById('twofa-security-alert')?.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+        });
+      }
+    });
+  </script>
+  <script src="js/offline-guard.js?v=6"></script>
+  <script src="js/maintenance-guard.js?v=9"></script>
+  <script src="js/aviso-guard.js?v=2"></script>
+</body>
+</html>

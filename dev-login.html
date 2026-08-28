@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="color-scheme" content="light only">
+  <meta name="theme-color" content="#0f172a">
+  <title>Portal do Desenvolvedor | PowerApps</title>
+  <link rel="stylesheet" href="css/style.css?v=152">
+  <link rel="icon" href="assets/logo.png" type="image/png">
+</head>
+<body class="auth-fixed auth-chrome dev-auth">
+  <div class="auth-page">
+    <div class="auth-panel">
+      <div class="auth-card">
+        <div class="auth-card__header">
+          <span class="logo-badge logo-badge--lg">
+            <img src="assets/logo.png" alt="PowerApps" width="56" height="56">
+          </span>
+          <p class="brand-name brand-name--auth">Power<span>Apps</span></p>
+          <h1 class="dev-login-title">Portal do Desenvolvedor</h1>
+          <p class="dev-login-sub">Acesso restrito — não é a área dos usuários</p>
+        </div>
+
+        <form id="dev-login-form" novalidate>
+          <div class="form-group">
+            <label for="email">E-mail</label>
+            <input id="email" name="email" type="email" required placeholder="seuemail@gmail.com" autocomplete="username">
+          </div>
+          <div class="form-group">
+            <label for="password">Senha</label>
+            <input id="password" name="password" type="password" required placeholder="senha" autocomplete="current-password">
+          </div>
+          <p id="dev-login-error" class="form-error" hidden></p>
+          <button class="btn btn-primary btn-block ripple" type="submit">Login</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/config.js?v=10"></script>
+  <script src="js/store.js?v=9"></script>
+  <script src="js/nome-completo.js?v=1"></script>
+  <script src="js/frontend-api.js?v=39"></script>
+  <script src="js/dev-auth.js?v=12"></script>
+  <script src="js/ui.js?v=31"></script>
+  <script src="js/dev-login.js?v=3"></script>
+  <script src="js/offline-guard.js?v=6"></script>
+</body>
+</html>
