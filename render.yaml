@@ -1,0 +1,41 @@
+# Render — API Express + Postgres (Aiven)
+# Em produção, defina DATABASE_URL com a URI do Aiven (banco PowerAppsSistemas, sslmode=require).
+# Mantenha NEON_DATABASE_URL só se precisar ler mensagens de suporte criptografadas com a chave antiga.
+services:
+  - type: web
+    name: rifas-sistemas-api
+    runtime: node
+    plan: free
+    rootDir: backend
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: SERVE_STATIC
+        value: "false"
+      - key: CORS_ORIGIN
+        sync: false
+      - key: DATABASE_URL
+        sync: false
+      - key: AIVEN_DATABASE_URL
+        sync: false
+      - key: NEON_DATABASE_URL
+        sync: false
+      - key: JOBS_SECRET
+        sync: false
+      - key: SUPPORT_MESSAGE_KEY
+        sync: false
+      - key: USER_PII_KEY
+        sync: false
+      - key: DB_ENCRYPTION_KEY
+        sync: false
+      - key: DATABASE_SSL_INSECURE
+        value: "false"
+      - key: NEON_ORG_ID
+        value: "org-cold-darkness-78414069"
+      - key: NEON_PROJECT_ID
+        value: "cool-meadow-04313389"
+      - key: NEON_API_KEY
+        sync: false

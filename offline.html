@@ -1,0 +1,255 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#09090b">
+  <title>Sem internet | PowerApps</title>
+  <link rel="icon" href="assets/Power2.png" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&family=Sora:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --red: #e11d2e;
+      --red-dark: #a30d24;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      height: 100%;
+    }
+
+    body {
+      min-height: 100vh;
+      min-height: 100dvh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+      padding-bottom: calc(1.5rem + env(safe-area-inset-bottom, 0px));
+      overflow: hidden;
+      font-family: 'Manrope', system-ui, sans-serif;
+      background: #09090b;
+      color: #f4f4f5;
+      text-align: center;
+    }
+
+    .offline-bg {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(ellipse 90% 55% at 50% -8%, rgba(225, 29, 46, 0.28), transparent 58%),
+        radial-gradient(ellipse 50% 40% at 100% 100%, rgba(163, 13, 36, 0.18), transparent 55%),
+        linear-gradient(180deg, #101014 0%, #09090b 55%, #070708 100%);
+    }
+
+    .offline-bg::before,
+    .offline-bg::after {
+      content: '';
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(48px);
+      opacity: 0.55;
+    }
+
+    .offline-bg::before {
+      width: min(42vw, 280px);
+      height: min(42vw, 280px);
+      top: 8%;
+      left: 12%;
+      background: rgba(225, 29, 46, 0.35);
+    }
+
+    .offline-bg::after {
+      width: min(36vw, 240px);
+      height: min(36vw, 240px);
+      right: 8%;
+      bottom: 12%;
+      background: rgba(200, 16, 46, 0.22);
+    }
+
+    .offline-screen {
+      position: relative;
+      z-index: 1;
+      width: min(420px, 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .offline-logo-wrap {
+      position: relative;
+      margin-bottom: 1.15rem;
+    }
+
+    .offline-logo-wrap::before {
+      content: '';
+      position: absolute;
+      inset: -14px;
+      border-radius: 28px;
+      background: linear-gradient(145deg, rgba(225, 29, 46, 0.45), transparent 55%);
+    }
+
+    .offline-logo {
+      position: relative;
+      width: 112px;
+      height: 112px;
+      object-fit: contain;
+      border-radius: 24px;
+      background: #000;
+      padding: 0.55rem;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45);
+    }
+
+    .offline-brand {
+      font-family: 'Sora', 'Manrope', sans-serif;
+      font-size: clamp(1.85rem, 5vw, 2.35rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.05;
+      color: #fafafa;
+    }
+
+    .offline-brand span { color: var(--red); }
+
+    .offline-subtitle {
+      margin-top: 0.4rem;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.42em;
+      text-transform: uppercase;
+      color: rgba(244, 244, 245, 0.72);
+    }
+
+    .offline-rule {
+      width: 56px;
+      height: 2px;
+      margin: 1.35rem 0 1.1rem;
+      border-radius: 999px;
+      background: linear-gradient(90deg, transparent, var(--red), transparent);
+    }
+
+    .offline-title {
+      font-family: 'Sora', 'Manrope', sans-serif;
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: #f4f4f5;
+    }
+
+    .offline-message {
+      width: 100%;
+      margin-top: 1rem;
+      padding: 1.1rem 1.15rem;
+      border-radius: 18px;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.03));
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.28);
+    }
+
+    .offline-msg {
+      font-size: 0.98rem;
+      line-height: 1.55;
+      color: #e4e4e7;
+    }
+
+    .offline-btn {
+      margin-top: 1.25rem;
+      appearance: none;
+      border: 0;
+      border-radius: 12px;
+      padding: 0.85rem 1.5rem;
+      min-width: 200px;
+      font-family: inherit;
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #fff;
+      cursor: pointer;
+      background: linear-gradient(135deg, var(--red), var(--red-dark));
+      box-shadow: 0 10px 28px rgba(200, 16, 46, 0.32);
+    }
+
+    .offline-btn:disabled {
+      opacity: 0.7;
+      cursor: wait;
+    }
+
+    .offline-btn:active:not(:disabled) {
+      transform: scale(0.98);
+    }
+  </style>
+</head>
+<body data-page="offline">
+  <div class="offline-bg" aria-hidden="true"></div>
+  <main class="offline-screen">
+    <div class="offline-logo-wrap">
+      <img class="offline-logo" src="assets/Power2.png" alt="PowerApps" width="112" height="112">
+    </div>
+    <p class="offline-brand">Power<span>Apps</span></p>
+    <p class="offline-subtitle">Systems</p>
+    <div class="offline-rule" aria-hidden="true"></div>
+    <h1 class="offline-title">Sem internet</h1>
+    <div class="offline-message">
+      <p class="offline-msg">
+        O sistema est&aacute; sem conex&atilde;o no momento.
+        Verifique sua rede e tente novamente.
+      </p>
+    </div>
+    <button type="button" class="offline-btn" id="btn-retry">Tentar novamente</button>
+  </main>
+  <script>
+    var btn = document.getElementById('btn-retry');
+    var msg = document.querySelector('.offline-msg');
+
+    function setBusy(busy) {
+      btn.disabled = !!busy;
+      btn.textContent = busy ? 'Conectando...' : 'Tentar novamente';
+    }
+
+    function probe() {
+      if (!navigator.onLine) return Promise.resolve(false);
+      return fetch('assets/Power2.png?ping=' + Date.now(), {
+        method: 'GET',
+        cache: 'no-store',
+        credentials: 'omit'
+      }).then(function (r) { return !!(r && r.ok); }).catch(function () { return false; });
+    }
+
+    function goOnline() {
+      window.location.replace('index.html');
+    }
+
+    function tryAgain() {
+      setBusy(true);
+      if (msg) msg.textContent = 'Tentando conectar novamente...';
+      probe().then(function (ok) {
+        if (ok) {
+          goOnline();
+          return;
+        }
+        setBusy(false);
+        if (msg) {
+          msg.textContent = 'Ainda sem internet. Verifique a conexão e tente de novo.';
+        }
+      });
+    }
+
+    btn.addEventListener('click', tryAgain);
+    window.addEventListener('online', function () {
+      probe().then(function (ok) { if (ok) goOnline(); });
+    });
+    window.addEventListener('offline', function () {
+      if (msg) {
+        msg.textContent = 'O sistema está sem conexão no momento. Verifique sua rede e tente novamente.';
+      }
+    });
+    setInterval(function () {
+      if (!navigator.onLine) return;
+      probe().then(function (ok) { if (ok) goOnline(); });
+    }, 3000);
+  </script>
+</body>
+</html>

@@ -1,0 +1,67 @@
+﻿<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <title>Conectando Instagram...</title>
+  <style>
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+      background: #0f0f11;
+      color: #f4f4f5;
+      text-align: center;
+      padding: 2rem;
+    }
+    .spinner {
+      width: 34px;
+      height: 34px;
+      margin: 0 auto 1rem;
+      border: 3px solid rgba(255, 255, 255, 0.18);
+      border-top-color: #fd1d1d;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    @media (prefers-reduced-motion: reduce) { .spinner { animation: none; } }
+  </style>
+</head>
+<body>
+  <div>
+    <div class="spinner" aria-hidden="true"></div>
+    <p id="mensagem">Finalizando conexão com o Instagram...</p>
+  </div>
+  <script>
+    (function () {
+      var params = new URLSearchParams(window.location.search);
+      var status = params.get('instagram') === 'conectado' ? 'conectado' : 'erro';
+      var motivo = params.get('motivo') || '';
+
+      document.getElementById('mensagem').textContent =
+        status === 'conectado'
+          ? 'Instagram conectado. Esta janela será fechada.'
+          : (motivo || 'Não foi possível conectar o Instagram.');
+
+      // A Edge Function não pode servir HTML no domínio do Supabase, então ela
+      // redireciona para cá e é esta página que avisa a janela que abriu o popup.
+      if (window.opener && !window.opener.closed) {
+        window.opener.postMessage(
+          { type: 'pas-instagram-oauth', status: status, motivo: motivo },
+          window.location.origin
+        );
+        window.close();
+        return;
+      }
+
+      // Sem popup (ex.: navegador abriu em aba nova), volta para as configurações.
+      var destino = 'configuracoes.html?instagram=' + encodeURIComponent(status);
+      if (motivo) destino += '&motivo=' + encodeURIComponent(motivo);
+      window.location.replace(destino);
+    })();
+  </script>
+</body>
+</html>

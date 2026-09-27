@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#000000">
+  <title>Suporte | PowerApps Systems</title>
+  <script>(function(){try{var t=localStorage.getItem('pas_theme');if(!t)t='light';document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
+  <link rel="stylesheet" href="css/style.css?v=184">
+  <link rel="icon" href="assets/logo.png" type="image/png">
+</head>
+<body>
+  <div id="app"></div>
+
+  <script src="js/config.js?v=10"></script>
+  <script src="js/store.js?v=9"></script>
+  <script src="js/nome-completo.js?v=1"></script>
+  <script src="js/frontend-api.js?v=34"></script>
+  <script src="js/theme.js?v=6"></script>
+  <script src="js/default-avatars.js?v=3"></script>
+  <script src="js/ui.js?v=8"></script>
+  <script src="js/contribuicao.js?v=6"></script>
+  <script src="js/notificacoes.js?v=21"></script>
+  <script src="js/banner.js?v=14"></script>
+  <script src="js/sessao.js?v=11"></script>
+  <script src="js/proteger-rota.js?v=8"></script>
+  <script src="js/layout.js?v=51"></script>
+  <script src="js/suporte-chat.js?v=14"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      const session = await Layout.render({ active: 'suporte', title: 'Suporte' });
+      if (!session) return;
+
+      if (typeof API !== 'undefined' && API.isVendasLocked?.(session)) {
+        Layout.setContent(Layout.suporteLockedPageHTML());
+        return;
+      }
+
+      Layout.setContent(`
+        <div class="slide-up pas-support-page">
+          <div class="page-head">
+            <div>
+              <h1 class="page-title">Suporte</h1>
+              <p class="page-subtitle">Conversa privada com o suporte</p>
+            </div>
+          </div>
+          <div class="pas-support-panel" id="pas-support-root"></div>
+        </div>
+      `);
+
+      const root = document.getElementById('pas-support-root');
+      SuporteChat.mountInline(root, {
+        userId: session.userId,
+        userEmail: session.email || '',
+        asDeveloper: false
+      });
+    });
+  </script>
+  <script src="js/offline-guard.js?v=6"></script>
+  <script src="js/maintenance-guard.js?v=9"></script>
+  <script src="js/aviso-guard.js?v=2"></script>
+</body>
+</html>
